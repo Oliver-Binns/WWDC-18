@@ -1,4 +1,4 @@
-class FunctionMachine{
+public class FunctionMachine{
 	init(){
 		
 	}

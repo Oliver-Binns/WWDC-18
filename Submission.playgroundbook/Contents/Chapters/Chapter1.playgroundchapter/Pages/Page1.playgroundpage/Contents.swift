@@ -1,24 +1,18 @@
 /*: Some Text
-# Functions
+# Mathematical Functions
 
 A mathematical function takes an input and returns an output.
 
-For example, we might have a function that adds two to a number.
-*/
-//#-hidden-code
-import UIKit
-import PlaygroundSupport
+These functions work as machines to
 
-func addTwo(_ value: Int) -> Int{
-	return value + 2
-}
-func double(_ value: Int) -> Int{
-	return value * 2
-}
-//#-end-hidden-code
-addTwo(0)
-addTwo(1)
-/*:
-Or one that doubles it.
+For example, we might have a function `addTwo` that adds two to our input number.
+Or another function `double` that multiplies it by two.
 */
+//#-editable-code
+addTwo(2)
 double(2)
+//#-end-editable-code
+/*:
+## Multiple Inputs
+Some functions may take multiple inputs.
+*/
