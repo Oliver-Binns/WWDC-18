@@ -1,8 +1,7 @@
-/*: Some Text
+/*:
 # Domain and Range
 
-A mathematical function takes an input and returns an output.
-
-For example, we might have a function that adds two to a number.
+The domain is a set of all the values which we are allowed to put into our function.
+Often there are some values that functions will not be able to take.
 */
 print("Hello World")

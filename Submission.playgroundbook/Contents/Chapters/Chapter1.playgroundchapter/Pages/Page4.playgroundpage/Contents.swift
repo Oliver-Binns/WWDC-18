@@ -1,9 +1,7 @@
 /*: Some Text
-# Higher Order Functions
+# Currying & Partial Application
 
-A mathematical function takes an input and returns an output.
-
-For example, we might have a function that adds two to a number.
+Currying is named after the American Mathematician, Haskell Curry.
 */
 
 print("Hello World")

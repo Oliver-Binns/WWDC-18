@@ -7,6 +7,6 @@
 	<key>Name</key>
 	<string>Domain and Range</string>
 	<key>LiveViewMode</key>
-	<string>HiddenByDefault</string>
+	<string>VisibleByDefault</string>
 </dict>
 </plist>
