@@ -14,6 +14,11 @@ addTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 double(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 /*:
 ## Multiple Inputs
-Some functions may take multiple inputs.
+Some functions may take multiple inputs, but only one output is produced.
 */
 multiply(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/, /*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+
+//#-hidden-code
+import PlaygroundSupport
+PlaygroundPage.current.assessmentStatus = .pass(message: "Well done, you've used the functions correctly!")
+//#-end-hidden-code

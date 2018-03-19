@@ -3,7 +3,7 @@ import CoreMotion
 import SceneKit
 import SpriteKit
 
-public class FactoryScene: SCNView{
+open class FactoryScene: SCNView{
 	let cameraNode = SCNNode()
 	let motionManager = CMMotionManager()
 	
@@ -11,7 +11,6 @@ public class FactoryScene: SCNView{
 		super.init(frame: CGRect(x: 0, y: 0, width: 750, height: 750), options: [SCNView.Option.preferredRenderingAPI.rawValue: SCNRenderingAPI.metal.rawValue])
 		super.scene = SCNScene()
 		
-		self.startCameraUpdates()
 		autoenablesDefaultLighting = true
 		
 		cameraNode.camera = SCNCamera()
@@ -19,7 +18,9 @@ public class FactoryScene: SCNView{
 		cameraNode.light?.type = .directional
 		cameraNode.light?.color = UIColor.white
 		cameraNode.position = SCNVector3(x: 0, y: 0, z: 100)
-		scene?.rootNode.addChildNode(cameraNode)		
+		scene?.rootNode.addChildNode(cameraNode)
+		
+		self.startCameraUpdates()
 	}
 	
 	private func startCameraUpdates(){

@@ -10,6 +10,8 @@ We may want to create a new function to join these two existing functions togeth
 
 We can assume a new function composition operation (````>>>````) will give us the ability to do this.
 
+Functions can now be combined, but remember the function on the right-hand side will be applied first.
+
 
 We can use this operation to easily create a new ````addFour```` function.
 ````
@@ -32,3 +34,26 @@ quadruple(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 //#-editable-code create doubleThenAddTwo
 //#-end-editable-code
 doubleThenAddTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+
+//#-hidden-code
+import PlaygroundSupport
+
+var quadPass = true
+var dTATPass = true
+for i in [0..<4]{
+	quadPass = quadPass && quadruple(i) == i * 4
+	dTATPass = dTATPass && doubleThenAddTwo(i) == (i * 2) + 2
+}
+if(quadPass && dTATPass){
+	PlaygroundPage.current.assessmentStatus = .pass(message: "Congratulations, your new functions work correctly!")
+}else{
+	var hints: [String] = []
+	if(!quadPass){
+		hints.append("Looks like your quadruple function doesn't work! Try applying double to double.")
+	}else if(!dTATPass){
+		hints.append("Remember, the function on the right is applied first.")
+	}
+	PlaygroundPage.current.assessmentStatus = .fail(hints: hints, solution: nil)
+}
+
+//#-end-hidden-code

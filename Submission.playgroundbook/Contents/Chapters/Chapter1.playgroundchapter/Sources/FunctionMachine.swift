@@ -1,15 +1,27 @@
 import SceneKit
 
 public class FunctionMachine: SCNNode{
-	var inProgress = false
+	var workInProgress = false
 	
 	public init<A, B>(name: String, function: (A) -> B){
 		super.init()
 		
-		let machine = SCNBox(width: 20, height: 20, length: 20, chamferRadius: 2)
+		let width: CGFloat = 60
+		let height: CGFloat = 40
+		let length: CGFloat = 20
+		
+		let machineColor = UIColor(red: 28/255.0, green: 117/255.0, blue: 188/255.0, alpha: 1)
+		
+		let machine = SCNBox(width: width, height: height, length: length, chamferRadius: 2)
 		machine.firstMaterial?.transparency = 1
-		machine.firstMaterial?.diffuse.contents = UIColor.red
+		machine.firstMaterial?.diffuse.contents = machineColor
 		createChildNode(geometry: machine)
+		
+		let io = SCNBox(width: width / 3, height: height / 3, length: length - 1, chamferRadius: 1)
+		io.firstMaterial?.transparency = 1
+		io.firstMaterial?.diffuse.contents = UIColor.darkGray
+		createChildNode(x: Float(-width / 2), y: -Float(height / 5), geometry: io)
+		createChildNode(x: Float(width / 2), y: -Float(height / 5), geometry: io)
 		
 		let text = SCNText(string: name, extrusionDepth: 1)
 		text.firstMaterial?.transparency = 1
@@ -25,8 +37,12 @@ public class FunctionMachine: SCNNode{
 		addChildNode(node)
 	}
 	
-	public func setInProgress(){
-		inProgress = true
+	public func destroy(){
+		
+	}
+	
+	public func setInProgress(_ value: Bool){
+		workInProgress = value
 	}
 	
 	public required init?(coder aDecoder: NSCoder) {
