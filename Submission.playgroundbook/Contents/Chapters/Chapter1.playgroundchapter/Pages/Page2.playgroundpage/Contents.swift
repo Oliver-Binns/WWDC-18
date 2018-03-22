@@ -10,39 +10,38 @@ We may want to create a new function to join these two existing functions togeth
 
 We can assume a new function composition operation (````>>>````) will give us the ability to do this.
 
-Functions can now be combined, but remember the function on the right-hand side will be applied first.
+Functions can now be combined, but remember the function on the **right-hand** side will be applied first.
 
 
 We can use this operation to easily create a new ````addFour```` function.
 ````
-let addFour = addTwo >>> addTwo
-addFour(2)
+let addFour = Math.addTwo >>> Math.addTwo
+Math.addFour(2)
 ````
 
 
 Your next task is to create two new functions:
-* ````quadruple()````
-* ````doubleThenAddTwo()````
+* ````Math.quadruple()````
+* ````Math.doubleThenAddTwo()````
 */
 //#-code-completion(everything, hide)
-//#-code-completion(identifier, show, >>>, double, addTwo)
-let quadruple = /*#-editable-code*/<#function composition#>/*#-end-editable-code*/ >>> /*#-editable-code*/<#function composition#>/*#-end-editable-code*/
+//#-code-completion(identifier, show, Math.double, Math.addTwo)
+Math.quadruple = /*#-editable-code*/<#first function#>/*#-end-editable-code*/ >>> /*#-editable-code*/<#second function#>/*#-end-editable-code*/
 //#-code-completion(everything, hide)
-quadruple(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+Math.quadruple(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 
-//#-code-completion(keyword, show, let)
-//#-editable-code create doubleThenAddTwo
-//#-end-editable-code
-doubleThenAddTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+//#-code-completion(identifier, show, >>>)
+Math.doubleThenAddTwo = /*#-editable-code*/<#Compose doubleThenAddTwo#>/*#-end-editable-code*/
+Math.doubleThenAddTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 
 //#-hidden-code
 import PlaygroundSupport
 
 var quadPass = true
 var dTATPass = true
-for i in [0..<4]{
-	quadPass = quadPass && quadruple(i) == i * 4
-	dTATPass = dTATPass && doubleThenAddTwo(i) == (i * 2) + 2
+for i in 0...4{
+	quadPass = quadPass && Math.quadruple(i) == i * 4
+	dTATPass = dTATPass && Math.doubleThenAddTwo(i) == (i * 2) + 2
 }
 if(quadPass && dTATPass){
 	PlaygroundPage.current.assessmentStatus = .pass(message: "Congratulations, your new functions work correctly!")
@@ -55,5 +54,4 @@ if(quadPass && dTATPass){
 	}
 	PlaygroundPage.current.assessmentStatus = .fail(hints: hints, solution: nil)
 }
-
 //#-end-hidden-code

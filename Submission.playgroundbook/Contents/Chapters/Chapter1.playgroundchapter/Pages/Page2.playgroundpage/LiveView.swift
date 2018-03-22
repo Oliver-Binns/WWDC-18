@@ -5,14 +5,10 @@ import PlaygroundSupport
 PlaygroundPage.current.needsIndefiniteExecution = true
 
 public class ThisScene: FactoryScene{
-	var quadruple: (Int) -> Int = {
-		value in
-		return value
-	}
 	let quadrupleMachine: FunctionMachine
 	
 	override init(){
-		quadrupleMachine = FunctionMachine(name: "×4", function: quadruple)
+		quadrupleMachine = FunctionMachine(name: "×4", function: Math.quadruple)
 		super.init()
 		
 		//User needs to create some new functions:
