@@ -16,10 +16,9 @@ open class FactoryScene: SCNView{
 		guard let scene = super.scene else { return }
 		
 		//Add smoke-
-		if let chimney = scene.rootNode.childNode(withName: "chimney", recursively: true){
+		if let chimney = scene.rootNode.childNode(withName: "smoke", recursively: true){
 			let smoke = SCNParticleSystem(named: "Smoke.scnp", inDirectory: nil)!
 			chimney.addParticleSystem(smoke)
-			scene.rootNode.addChildNode(chimney)
 		}
 		
 	}
