@@ -33,3 +33,4 @@ public class ThisScene: FactoryScene{
 
 let scene = ThisScene()
 PlaygroundPage.current.liveView = scene
+scene.sqrtMachine.destroy()

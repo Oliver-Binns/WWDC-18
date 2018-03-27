@@ -1,47 +1,41 @@
 import SceneKit
 
-public class FunctionMachine: SCNNode{
+public class FunctionMachine{
 	var workInProgress = false
+	var destroyed = false
+	
+	public let node: SCNNode
 	
 	public init<A, B>(name: String, function: (A) -> B){
-		super.init()
+		let scene = SCNScene(named: "FunctionMachine.scn")!
+		node = scene.rootNode
 		
-		let width: CGFloat = 60
-		let height: CGFloat = 40
-		let length: CGFloat = 20
-		
-		let machineColor = UIColor(red: 28/255.0, green: 117/255.0, blue: 188/255.0, alpha: 1)
-		
-		let machine = SCNBox(width: width, height: height, length: length, chamferRadius: 2)
-		machine.firstMaterial?.transparency = 1
-		machine.firstMaterial?.diffuse.contents = machineColor
-		createChildNode(geometry: machine)
-		
-		let io = SCNBox(width: width / 3, height: height / 3, length: length - 1, chamferRadius: 1)
-		io.firstMaterial?.transparency = 1
-		io.firstMaterial?.diffuse.contents = UIColor.darkGray
-		createChildNode(x: Float(-width / 2), y: -Float(height / 5), geometry: io)
-		createChildNode(x: Float(width / 2), y: -Float(height / 5), geometry: io)
-		
-		let text = SCNText(string: name, extrusionDepth: 1)
-		text.firstMaterial?.transparency = 1
-		text.flatness = 0.2
-		text.firstMaterial?.diffuse.contents = UIColor.black
-		let (minVec, maxVec) = text.boundingBox
-		createChildNode(x: (minVec.x - maxVec.x) / 2, y: minVec.y - maxVec.y, z: 20, geometry: text)
-		
-		let smoke = SCNParticleSystem(named: "Smoke.scnp", inDirectory: nil)!
-		
-	}
-	
-	private func createChildNode(x : Float = 0, y: Float = 0, z: Float = 0, geometry: SCNGeometry){
-		let node = SCNNode(geometry: geometry)
-		node.position = SCNVector3(x: x, y: y, z: z)
-		addChildNode(node)
+		//Add smoke-
+		if let chimney = node.childNode(withName: "smoke", recursively: true){
+			let smoke = SCNParticleSystem(named: "Smoke.scnp", inDirectory: nil)!
+			chimney.addParticleSystem(smoke)
+		}
 	}
 	
 	public func destroy(){
-		
+		let fire = SCNParticleSystem(named: "Fire.scnp", inDirectory: nil)!
+		node.childNode(withName: "smoke", recursively: true)?.removeFromParentNode()
+		node.childNode(withName: "capsule", recursively: true)?.addParticleSystem(fire)
+	}
+	
+	private func createChildNode(x : Float = 0, y: Float = 0, z: Float = 0, geometry: SCNGeometry){
+		let child = SCNNode(geometry: geometry)
+		child.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: geometry))
+		child.physicsBody?.isAffectedByGravity = true
+		child.position = SCNVector3(x: x, y: y, z: z)
+		node.addChildNode(child)
+	}
+	
+	public func dropNumber(_ number: Int){
+		let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.1)
+		box.firstMaterial?.transparency = 1
+		box.firstMaterial?.diffuse.contents = UIColor.random()
+		createChildNode(y: 5, geometry: box)
 	}
 	
 	public func setInProgress(_ value: Bool){
