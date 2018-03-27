@@ -4,56 +4,29 @@ import SceneKit
 import SpriteKit
 
 open class FactoryScene: SCNView{
-	let cameraNode = SCNNode()
 	let motionManager = CMMotionManager()
 	
 	public init(){
 		super.init(frame: CGRect(x: 0, y: 0, width: 750, height: 750), options: [SCNView.Option.preferredRenderingAPI.rawValue: SCNRenderingAPI.metal.rawValue])
-		super.scene = SCNScene()
 		
+		super.scene = SCNScene(named: "FunctionMachine.scn")
 		autoenablesDefaultLighting = true
+		allowsCameraControl = true
 		
-		cameraNode.camera = SCNCamera()
-		cameraNode.light = SCNLight()
-		cameraNode.light?.type = .directional
-		cameraNode.light?.color = UIColor.white
-		cameraNode.position = SCNVector3(x: 0, y: 0, z: 100)
-		scene?.rootNode.addChildNode(cameraNode)
+		guard let scene = super.scene else { return }
 		
-		self.startCameraUpdates()
-	}
-	
-	private func startCameraUpdates(){
-		motionManager.deviceMotionUpdateInterval = 0.2
-		if motionManager.isAccelerometerAvailable{
-			var initial: SCNVector3?
-			motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {
-				(motion: CMAccelerometerData?, error: Error?) in
-				guard let acc = motion?.acceleration else { return }
-				guard let start = initial else { initial = SCNVector3(x: Float(acc.x), y: Float(acc.y), z: Float(acc.z)); return }
-				
-				// Rotating the camera based on motion
-				self.updateCamera(
-					dx: CGFloat(acc.x - Double(start.x)),
-					dy: CGFloat(acc.y - Double(start.y)),
-					dz: CGFloat(acc.z - Double(start.z))
-				)
-			})
+		//Add smoke-
+		if let chimney = scene.rootNode.childNode(withName: "chimney", recursively: true){
+			let smoke = SCNParticleSystem(named: "Smoke.scnp", inDirectory: nil)!
+			chimney.addParticleSystem(smoke)
+			scene.rootNode.addChildNode(chimney)
 		}
-	}
-	
-	private func updateCamera(dx: CGFloat, dy: CGFloat, dz: CGFloat){
-		cameraNode.runAction(SCNAction.rotateTo(
-			x: dx / 10,
-			y: dy / 10,
-			z: dz / 10,
-			duration: 0.2
-		))
+		
 	}
 	
 	public func addMachine(_ machine: FunctionMachine){
 		machine.position = SCNVector3(x: 0, y: 0, z: 0)
-		scene?.rootNode.addChildNode(machine)
+		//scene?.rootNode.addChildNode(machine)
 	}
 	
 	public required init?(coder aDecoder: NSCoder) {

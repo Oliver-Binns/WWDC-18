@@ -29,6 +29,9 @@ public class FunctionMachine: SCNNode{
 		text.firstMaterial?.diffuse.contents = UIColor.black
 		let (minVec, maxVec) = text.boundingBox
 		createChildNode(x: (minVec.x - maxVec.x) / 2, y: minVec.y - maxVec.y, z: 20, geometry: text)
+		
+		let smoke = SCNParticleSystem(named: "Smoke.scnp", inDirectory: nil)!
+		
 	}
 	
 	private func createChildNode(x : Float = 0, y: Float = 0, z: Float = 0, geometry: SCNGeometry){
