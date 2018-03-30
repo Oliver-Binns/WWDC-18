@@ -2,39 +2,62 @@ import UIKit
 import CoreMotion
 import SceneKit
 import SpriteKit
+import PlaygroundSupport
 
-open class FactoryScene: SCNView{
+open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDelegate{
+    var machines: [FunctionMachine] = []
+    
 	public init(){
 		super.init(frame: CGRect(x: 0, y: 0, width: 20, height: 20), options: [SCNView.Option.preferredRenderingAPI.rawValue: SCNRenderingAPI.metal.rawValue])
-		
-		super.scene = SCNScene(named: "Factory.scn")!
+        self.scene = SCNScene(named: "Factory.scn")!
+        self.scene!.physicsWorld.contactDelegate = self
 		autoenablesDefaultLighting = true
 		allowsCameraControl = true
-		
-		guard let scene = super.scene else { return }
-		scene.physicsWorld.contactDelegate = self
-		
+		showsStatistics = true
 	}
+    
+    func viewDidLoad(){
+        self.scene!.physicsWorld.contactDelegate = self
+    }
 	
 	public func addMachine(_ machine: FunctionMachine){
-		machine.node.position = SCNVector3(x: 0, y: 0, z: 0)
+		machine.node.position = SCNVector3(x: 0, y: 0, z: Float(machines.count) * -5)
 		scene?.rootNode.addChildNode(machine.node)
+        machines.append(machine)
 	}
 	
 	public required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+    
+    public func getMachine(named: String) -> FunctionMachine?{
+        for machine in machines{
+            if machine.name == named{
+                return machine
+            }
+        }
+        return nil
+    }
+    
+    public func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact){
+        if contact.nodeA.name == "conveyor"{
+            if contact.nodeB.name!.contains("numberbox"){
+                if contact.nodeB.position.x < 2{
+                    let process = SCNAction.move(to: SCNVector3(x: 5.7, y: 0.3, z: 0), duration: 1.5)
+                    contact.nodeB.runAction(process)
+                }
+            }
+        }
+    }
 }
-extension FactoryScene: SCNPhysicsContactDelegate{
-	public func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact){
-		var box = contact.nodeA
-		if(contact.nodeA.name == "conveyor"){
-			box = contact.nodeB
-		}else if(contact.nodeB.name != "conveyor"){
-			return
-		}
-		box.geometry!.firstMaterial!.diffuse.contents = UIColor.yellow
-	}
+extension FactoryScene: PlaygroundLiveViewMessageHandler{
+    public func receive(_ message: PlaygroundValue){
+        guard case let .dictionary(dict) = message else { return }
+        guard case let .string(f)? = dict["machine"] else { return }
+        guard case let .integer(n)? = dict["arg"] else { return }
+        
+        getMachine(named: f)?.dropNumber(n)
+    }
 }
 extension UIColor{
 	static func random() -> UIColor{
