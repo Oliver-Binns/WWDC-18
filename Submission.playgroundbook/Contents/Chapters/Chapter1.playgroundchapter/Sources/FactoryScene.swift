@@ -11,9 +11,7 @@ open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDel
 		super.init(frame: CGRect(x: 0, y: 0, width: 20, height: 20), options: [SCNView.Option.preferredRenderingAPI.rawValue: SCNRenderingAPI.metal.rawValue])
         self.scene = SCNScene(named: "Factory.scn")!
         self.scene!.physicsWorld.contactDelegate = self
-		autoenablesDefaultLighting = true
 		allowsCameraControl = true
-		showsStatistics = true
 	}
     
     func viewDidLoad(){
@@ -41,11 +39,11 @@ open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDel
     
     public func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact){
         if contact.nodeA.name == "conveyor"{
-            if contact.nodeB.name!.contains("numberbox"){
-                if contact.nodeB.position.x < 2{
-                    let process = SCNAction.move(to: SCNVector3(x: 5.7, y: 0.3, z: 0), duration: 1.5)
-                    contact.nodeB.runAction(process)
-                }
+            guard let name = contact.nodeB.name else { return }
+            if name.contains("numberbox"){
+                let data = name.split(separator: "_")
+                let machine = getMachine(named: String(data[1]))!
+                machine.process(node: contact.nodeB, out: Int(data[2])!)
             }
         }
     }
@@ -55,16 +53,8 @@ extension FactoryScene: PlaygroundLiveViewMessageHandler{
         guard case let .dictionary(dict) = message else { return }
         guard case let .string(f)? = dict["machine"] else { return }
         guard case let .integer(n)? = dict["arg"] else { return }
+        guard case let .integer(out)? = dict["ret"] else { return }
         
-        getMachine(named: f)?.dropNumber(n)
+        getMachine(named: f)?.dropNumber(n, output: out)
     }
-}
-extension UIColor{
-	static func random() -> UIColor{
-		let hue : CGFloat = CGFloat(arc4random() % 256) / 256 // use 256 to get full range from 0.0 to 1.0
-		let saturation : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from white
-		let brightness : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from black
-		
-		return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1)
-	}
 }

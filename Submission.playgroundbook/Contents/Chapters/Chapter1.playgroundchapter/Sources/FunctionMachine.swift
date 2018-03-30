@@ -2,14 +2,16 @@ import SceneKit
 
 public class FunctionMachine{
     public let name: String
+    public let f: (Int) -> Int
     
 	var workInProgress = false
 	var destroyed = false
 	
 	public let node: SCNNode
 	
-	public init<A, B>(name: String, function: (A) -> B){
+	public init(name: String, function: @escaping (Int) -> Int){
         self.name = name
+        self.f = function
         
 		let scene = SCNScene(named: "FunctionMachine.scn")!
         node = scene.rootNode
@@ -34,12 +36,25 @@ public class FunctionMachine{
 		node.childNode(withName: "capsule", recursively: true)?.addParticleSystem(fire)
 	}
 	
-	
+    public func process(node: SCNNode, out: Int){
+        if node.position.x < 2{
+            let input = SCNAction.move(to: SCNVector3(x: 4, y: 0.3, z: 0), duration: 0.75)
+            node.runAction(input){
+                //Set.. output value
+                guard let diffuse = node.geometry?.firstMaterial?.diffuse else { return }
+                guard let layer = diffuse.contents as? CALayer else { return }
+                diffuse.contents = self.getTextLayer(value: String(out), color: layer.backgroundColor)
+                
+                let output = SCNAction.move(to: SCNVector3(x: 5.7, y: 0.3, z: 0), duration: 0.75)
+                node.runAction(output)
+            }
+        }
+    }
     
-    private func getTextLayer(value: String) -> CALayer{
+    private func getTextLayer(value: String, color: CGColor? = nil) -> CALayer{
         let layer = CALayer()
         layer.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        layer.backgroundColor = UIColor.random().cgColor
+        layer.backgroundColor = (color != nil) ? color!: CGColor.random()
         
         let textLayer = CATextLayer()
         textLayer.frame = layer.frame
@@ -52,11 +67,11 @@ public class FunctionMachine{
         return layer
     }
 	
-	public func dropNumber(_ number: Int){
+    public func dropNumber(_ number: Int, output: Int){
 		let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.1)
 		box.firstMaterial?.transparency = 1
         box.firstMaterial?.diffuse.contents = getTextLayer(value: String(number))
-        createChildNode(val: number, geometry: box)
+        createChildNode(val: output, geometry: box)
 	}
     
     private func createChildNode(val: Int, geometry: SCNGeometry){
@@ -79,3 +94,13 @@ public class FunctionMachine{
 		fatalError("init(coder:) has not been implemented")
 	}
 }
+extension CGColor{
+    static func random() -> CGColor{
+        let hue : CGFloat = CGFloat(arc4random() % 256) / 256 // use 256 to get full range from 0.0 to 1.0
+        let saturation : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from white
+        let brightness : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from black
+        
+        return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1).cgColor
+    }
+}
+
