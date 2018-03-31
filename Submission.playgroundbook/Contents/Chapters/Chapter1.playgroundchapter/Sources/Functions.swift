@@ -37,7 +37,7 @@ public func parse(_ text: String, notify machine: String, about function: String
     let regex = "\(function)\\([^)]*"
     guard let range = text.range(of: regex, options: .regularExpression) else { return }
     let placeholder = String(text[range]).replacingOccurrences(of: "\(function)(", with: "")
-    guard let digitRange = placeholder.range(of: "[0-9]+", options: .regularExpression) else { return }
+    guard let digitRange = placeholder.range(of: "[-+]?[0-9]+", options: .regularExpression) else { return }
     guard let input = Int(placeholder[digitRange]) else { return }
     send(f: machine, input: input, output: f(input))
 }

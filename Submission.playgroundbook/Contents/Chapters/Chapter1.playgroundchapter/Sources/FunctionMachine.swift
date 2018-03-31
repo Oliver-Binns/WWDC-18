@@ -84,7 +84,7 @@ public class FunctionMachine{
     
     private func createChildNode(val: Int?, geometry: SCNGeometry) -> SCNNode{
         let child = SCNNode(geometry: geometry)
-        let value = (val != nil) ? String(val!) : ""
+        let value = (val != nil) ? String(val!) : " "
         child.name = "numberbox_" + self.name + "_" + value
         child.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         child.physicsBody!.isAffectedByGravity = true

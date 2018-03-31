@@ -54,15 +54,9 @@ var dTATPass = true
 for i in 0...4{
 	dTATPass = dTATPass && Math.doubleThenAddTwo(i) == (i * 2) + 2
 }
-if(quadPass && dTATPass){
-	PlaygroundPage.current.assessmentStatus = .pass(message: "Congratulations, your new functions work correctly!")
+if(!dTATPass){
+    PlaygroundPage.current.assessmentStatus = .fail(hints: ["Remember, the function on the right is applied first."], solution: nil)
 }else{
-	var hints: [String] = []
-	if(!quadPass){
-		hints.append("Looks like your quadruple function doesn't work! Try applying double to double.")
-	}else if(!dTATPass){
-		hints.append("Remember, the function on the right is applied first.")
-	}
-	PlaygroundPage.current.assessmentStatus = .fail(hints: hints, solution: nil)
+    PlaygroundPage.current.assessmentStatus = .pass(message: "Congratulations, your new functions work correctly!")
 }
 //#-end-hidden-code
