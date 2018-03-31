@@ -2,19 +2,20 @@ import SceneKit
 
 public class FunctionMachine{
     public let name: String
-    public let f: (Int) -> Int
+    public let f: (Int) -> Int?
+    public var toProcess: [SCNNode] = []
     
 	var workInProgress = false
-	var destroyed = false
+	private var destroyed = false
 	
 	public let node: SCNNode
 	
-	public init(name: String, function: @escaping (Int) -> Int){
+	public init(name: String, function: @escaping (Int) -> Int?){
         self.name = name
         self.f = function
         
 		let scene = SCNScene(named: "FunctionMachine.scn")!
-        node = scene.rootNode
+        node = scene.rootNode.childNode(withName: "machine", recursively: true)!
         if let conveyor = node.childNode(withName: "conveyor", recursively: true){
             let physics = SCNPhysicsBody(type: .kinematic, shape: nil)
             physics.categoryBitMask = 2
@@ -31,23 +32,28 @@ public class FunctionMachine{
 	}
 	
 	public func destroy(){
+        guard !self.destroyed else { return }
+        self.destroyed = true
 		let fire = SCNParticleSystem(named: "Fire.scnp", inDirectory: nil)!
 		node.childNode(withName: "smoke", recursively: true)?.removeFromParentNode()
 		node.childNode(withName: "capsule", recursively: true)?.addParticleSystem(fire)
 	}
 	
-    public func process(node: SCNNode, out: Int){
-        if node.position.x < 2{
-            let input = SCNAction.move(to: SCNVector3(x: 4, y: 0.3, z: 0), duration: 0.75)
-            node.runAction(input){
-                //Set.. output value
-                guard let diffuse = node.geometry?.firstMaterial?.diffuse else { return }
-                guard let layer = diffuse.contents as? CALayer else { return }
-                diffuse.contents = self.getTextLayer(value: String(out), color: layer.backgroundColor)
-                
-                let output = SCNAction.move(to: SCNVector3(x: 5.7, y: 0.3, z: 0), duration: 0.75)
-                node.runAction(output)
-            }
+    public func process(node: SCNNode, out: Int?){
+        //Only process each item once
+        guard let index = toProcess.index(of: node) else { print("not in array"); return }
+        toProcess.remove(at: index)
+        
+        let input = SCNAction.move(to: SCNVector3(x: 0.5, y: 0.3, z: 0), duration: 0.75)
+        node.runAction(input){
+            guard out != nil else { self.destroy(); return }
+            //Set.. output value
+            guard let diffuse = node.geometry?.firstMaterial?.diffuse else { return }
+            guard let layer = diffuse.contents as? CALayer else { return }
+            diffuse.contents = self.getTextLayer(value: String(out!), color: layer.backgroundColor)
+            
+            let output = SCNAction.move(to: SCNVector3(x: 2.2, y: 0.3, z: 0), duration: 0.75)
+            node.runAction(output)
         }
     }
     
@@ -67,23 +73,25 @@ public class FunctionMachine{
         return layer
     }
 	
-    public func dropNumber(_ number: Int, output: Int){
+    public func dropNumber(_ number: Int, output: Int?){
 		let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.1)
 		box.firstMaterial?.transparency = 1
         box.firstMaterial?.diffuse.contents = getTextLayer(value: String(number))
         let child = createChildNode(val: output, geometry: box)
+        toProcess.append(child)
         node.addChildNode(child)
 	}
     
-    private func createChildNode(val: Int, geometry: SCNGeometry) -> SCNNode{
+    private func createChildNode(val: Int?, geometry: SCNGeometry) -> SCNNode{
         let child = SCNNode(geometry: geometry)
-        child.name = "numberbox_" + self.name + "_" + String(val)
+        let value = (val != nil) ? String(val!) : ""
+        child.name = "numberbox_" + self.name + "_" + value
         child.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         child.physicsBody!.isAffectedByGravity = true
         child.physicsBody!.categoryBitMask = 4
         child.physicsBody!.contactTestBitMask = 7
         child.physicsBody!.collisionBitMask = 7
-        child.position = SCNVector3(x: 0, y: 5, z: 0)
+        child.position = SCNVector3(x: -3.5, y: 5, z: 0)
         return child
     }
 	

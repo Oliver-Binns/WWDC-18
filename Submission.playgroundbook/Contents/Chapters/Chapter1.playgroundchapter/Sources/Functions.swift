@@ -18,8 +18,10 @@ public class Math{
     }
     
     public static let squareRoot = {
-        (value: Int) -> Int in
-        return Int(sqrt(Double(value)))
+        (value: Int) -> Int? in
+        let ret = sqrt(Double(value))
+        guard !ret.isNaN else { return nil }
+        return Int(ret)
     }
     
     private static let returnVal = {
@@ -31,7 +33,7 @@ public class Math{
     public static var doubleThenAddTwo: (Int) -> Int = returnVal
 }
 
-public func parse(_ text: String, notify machine: String, about function: String, _ f: (Int) -> Int){
+public func parse(_ text: String, notify machine: String, about function: String, _ f: (Int) -> Int?){
     let regex = "\(function)\\([^)]*"
     guard let range = text.range(of: regex, options: .regularExpression) else { return }
     let placeholder = String(text[range]).replacingOccurrences(of: "\(function)(", with: "")
@@ -40,12 +42,14 @@ public func parse(_ text: String, notify machine: String, about function: String
     send(f: machine, input: input, output: f(input))
 }
 
-public func send(f: String, input: Int, output: Int){
-    let dict: [String: PlaygroundValue] = [
+public func send(f: String, input: Int, output: Int?){
+    var dict: [String: PlaygroundValue] = [
         "machine": .string(f),
-        "arg" : .integer(input),
-        "ret": .integer(output)
+        "arg" : .integer(input)
     ]
+    if output != nil{
+        dict["ret"] = .integer(output!)
+    }
     
     let page = PlaygroundPage.current
     if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {

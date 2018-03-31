@@ -19,7 +19,7 @@ open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDel
     }
 	
 	public func addMachine(_ machine: FunctionMachine){
-		machine.node.position = SCNVector3(x: 0, y: 0, z: Float(machines.count) * -5)
+		machine.node.position = SCNVector3(x: 3.5, y: 0, z: Float(machines.count) * -5)
 		scene?.rootNode.addChildNode(machine.node)
         machines.append(machine)
 	}
@@ -43,7 +43,8 @@ open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDel
             if name.contains("numberbox"){
                 let data = name.split(separator: "_")
                 let machine = getMachine(named: String(data[1]))!
-                machine.process(node: contact.nodeB, out: Int(data[2])!)
+                let out: Int? = Int(data[2])
+                machine.process(node: contact.nodeB, out: out)
             }
         }
     }
@@ -51,10 +52,14 @@ open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDel
 extension FactoryScene: PlaygroundLiveViewMessageHandler{
     public func receive(_ message: PlaygroundValue){
         guard case let .dictionary(dict) = message else { return }
+        
         guard case let .string(f)? = dict["machine"] else { return }
         guard case let .integer(n)? = dict["arg"] else { return }
-        guard case let .integer(out)? = dict["ret"] else { return }
         
+        guard case let .integer(out)? = dict["ret"] else {
+            getMachine(named: f)?.dropNumber(n, output: nil)
+            return
+        }
         getMachine(named: f)?.dropNumber(n, output: out)
     }
 }

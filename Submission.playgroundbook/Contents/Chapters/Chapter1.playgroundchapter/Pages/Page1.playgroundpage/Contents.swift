@@ -22,7 +22,7 @@ parse(PlaygroundPage.current.text, notify: "×2", about: "Math.double", Math.dou
 //#-end-hidden-code
 /*:
 ## Multiple Inputs
-Some functions may take multiple inputs, but only one output is produced.
+Some functions may take multiple inputs, but one output may be produced.
 */
 Math.multiply(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/, /*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 
