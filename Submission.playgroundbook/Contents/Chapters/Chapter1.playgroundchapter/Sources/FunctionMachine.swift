@@ -71,10 +71,11 @@ public class FunctionMachine{
 		let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.1)
 		box.firstMaterial?.transparency = 1
         box.firstMaterial?.diffuse.contents = getTextLayer(value: String(number))
-        createChildNode(val: output, geometry: box)
+        let child = createChildNode(val: output, geometry: box)
+        node.addChildNode(child)
 	}
     
-    private func createChildNode(val: Int, geometry: SCNGeometry){
+    private func createChildNode(val: Int, geometry: SCNGeometry) -> SCNNode{
         let child = SCNNode(geometry: geometry)
         child.name = "numberbox_" + self.name + "_" + String(val)
         child.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
@@ -83,7 +84,7 @@ public class FunctionMachine{
         child.physicsBody!.contactTestBitMask = 7
         child.physicsBody!.collisionBitMask = 7
         child.position = SCNVector3(x: 0, y: 5, z: 0)
-        node.addChildNode(child)
+        return child
     }
 	
 	public func setInProgress(_ value: Bool){

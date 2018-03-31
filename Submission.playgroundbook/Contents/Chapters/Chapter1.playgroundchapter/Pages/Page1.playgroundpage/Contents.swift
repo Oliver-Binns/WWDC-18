@@ -9,13 +9,17 @@ For example, we might have a function `Math.addTwo` that increases the value of 
 
 Or another function `Math.double` that multiplies the input number by 2.
 */
-//#-hidden-code
-import PlaygroundSupport
-//#-end-hidden-code
 
 //#-code-completion(everything, hide)
 Math.addTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+//#-hidden-code
+import PlaygroundSupport
+parse(PlaygroundPage.current.text, notify: "+2", about: "Math.addTwo", Math.addTwo)
+//#-end-hidden-code
 Math.double(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+//#-hidden-code
+parse(PlaygroundPage.current.text, notify: "×2", about: "Math.double", Math.double)
+//#-end-hidden-code
 /*:
 ## Multiple Inputs
 Some functions may take multiple inputs, but only one output is produced.
