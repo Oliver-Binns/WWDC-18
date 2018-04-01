@@ -3,7 +3,7 @@ import SceneKit
 import PlaygroundSupport
 
 let scene = FactoryScene()
-let sqrtMachine = FunctionMachine(name: "√", function: Math.squareRoot)
+let sqrtMachine = FunctionMachine(name: "√", function: squareRoot)
 scene.addMachine(sqrtMachine)
 
 PlaygroundPage.current.liveView = scene

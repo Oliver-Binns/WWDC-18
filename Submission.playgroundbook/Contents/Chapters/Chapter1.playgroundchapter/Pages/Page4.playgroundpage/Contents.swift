@@ -17,7 +17,7 @@ prefix func ~<A, B, C>(f: @escaping (A, B) -> C) -> (A) -> (B) -> C {
 }
 //#-end-hidden-code
 //#-editable-code
-let multiply = ~Math.multiply
+let multiply = ~multiply
 multiply(3)(4)
 //#-end-editable-code
 /*:
@@ -25,8 +25,8 @@ We can use Currying to help us create new functions by using a technique called 
  
 With the new curried functions, we can apply each argument separately.
 ````
-Math.triple = multiply(3)
-Math.triple(2) //returns 6
+triple = multiply(3)
+triple(2) //returns 6
 ````
 */
 let double = multiply(2)

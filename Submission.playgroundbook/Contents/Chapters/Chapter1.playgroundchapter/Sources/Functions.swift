@@ -1,37 +1,37 @@
 import Foundation
 import PlaygroundSupport
 
-public class Math{
-    public static let addTwo = {
-        (value: Int) -> Int in
-        return value + 2
-    }
-    
-    public static let double = {
-        (value: Int) -> Int in
-        return value * 2
-    }
-    
-    public static let multiply = {
-        (a: Int, b: Int) -> Int in
-        return a * b
-    }
-    
-    public static let squareRoot = {
-        (value: Int) -> Int? in
-        let ret = sqrt(Double(value))
-        guard !ret.isNaN else { return nil }
-        return Int(ret)
-    }
-    
-    private static let returnVal = {
-        (value: Int) -> Int in
-        return value
-    }
-    
-    public static var quadruple: (Int) -> Int = returnVal
-    public static var doubleThenAddTwo: (Int) -> Int = returnVal
+public let addTwo = {
+    (value: Int) -> Int in
+    return value + 2
 }
+
+public let double = {
+    (value: Int) -> Int in
+    return value * 2
+}
+
+public let addFour = addTwo >>> addTwo
+
+public let multiply = {
+    (a: Int, b: Int) -> Int in
+    return a * b
+}
+
+public let squareRoot = {
+    (value: Int) -> Int? in
+    let ret = sqrt(Double(value))
+    guard !ret.isNaN else { return nil }
+    return Int(ret)
+}
+
+public let returnVal = {
+    (value: Int) -> Int in
+    return value
+}
+
+public var quadruple: (Int) -> Int = returnVal
+public var doubleThenAddTwo: (Int) -> Int = returnVal
 
 public func parse(_ text: String, notify machine: String, about function: String, _ f: (Int) -> Int?) -> Int?{
     let regex = "\(function)\\([^)]*"

@@ -15,27 +15,36 @@ Functions can now be combined, but remember the function on the **right-hand** s
 
 We can use this operation to easily create a new ````addFour```` function.
 ````
-Math.addFour = Math.addTwo >>> Math.addTwo
-Math.addFour(2)
+addFour = addTwo >>> addTwo
+addFour(2)
 ````
 
 
 Your next task is to create two new functions:
-* ````Math.quadruple````
-* ````Math.doubleThenAddTwo````
+* ````quadruple````
+* ````doubleThenAddTwo````
 */
 //#-code-completion(everything, hide)
-//#-code-completion(module, show, Math)
-Math.quadruple = /*#-editable-code*/<#first function#>/*#-end-editable-code*/ >>> /*#-editable-code*/<#second function#>/*#-end-editable-code*/
-//#-code-completion(everything, hide)
-Math.quadruple(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+//#-code-completion(literal, show, integer)
+addFour(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 
 //#-hidden-code
 import PlaygroundSupport
-parse(PlaygroundPage.current.text, notify: "×4", about: "Math.quadruple", Math.quadruple)
+parse(PlaygroundPage.current.text, notify: "+4", about: "addFour", addFour)
+//#-end-hidden-code
+//#-code-completion(everything, hide)
+//#-code-completion(identifier, show, addTwo, addFour, double, quadruple)
+quadruple = /*#-editable-code*/<#first function#>/*#-end-editable-code*/ >>> /*#-editable-code*/<#second function#>/*#-end-editable-code*/
+//#-code-completion(everything, hide)
+//#-code-completion(literal, show, integer)
+quadruple(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+
+//#-hidden-code
+parse(PlaygroundPage.current.text, notify: "×4", about: "quadruple", quadruple)
+
 var quadPass = true
 for i in 0...4{
-    quadPass = quadPass && Math.quadruple(i) == i * 4
+    quadPass = quadPass && quadruple(i) == i * 4
 }
 if(quadPass){
     PlaygroundPage.current.assessmentStatus = .fail(hints: ["Remember, the function on the right is applied first."], solution: nil)
@@ -44,15 +53,18 @@ if(quadPass){
 }
 //#-end-hidden-code
 
-//#-code-completion(identifier, show, >>>)
-Math.doubleThenAddTwo = /*#-editable-code*/<#Compose doubleThenAddTwo#>/*#-end-editable-code*/
-Math.doubleThenAddTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+//#-code-completion(everything, hide)
+//#-code-completion(identifier, show, addTwo, addFour, double, quadruple, >>>)
+doubleThenAddTwo = /*#-editable-code*/<#Compose doubleThenAddTwo#>/*#-end-editable-code*/
+//#-code-completion(everything, hide)
+//#-code-completion(literal, show, integer)
+doubleThenAddTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 
 //#-hidden-code
-parse(PlaygroundPage.current.text, notify: "2n+2", about: "Math.doubleThenAddTwo", Math.doubleThenAddTwo)
+parse(PlaygroundPage.current.text, notify: "2n+2", about: "doubleThenAddTwo", doubleThenAddTwo)
 var dTATPass = true
 for i in 0...4{
-	dTATPass = dTATPass && Math.doubleThenAddTwo(i) == (i * 2) + 2
+	dTATPass = dTATPass && doubleThenAddTwo(i) == (i * 2) + 2
 }
 if(!dTATPass){
     PlaygroundPage.current.assessmentStatus = .fail(hints: ["Remember, the function on the right is applied first."], solution: nil)

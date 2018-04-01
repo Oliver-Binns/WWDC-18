@@ -10,13 +10,15 @@ If a function cannot take every possible value, it is know as a **partial** func
 
 Your task here is to find input values which break the function machines.
 */
-/* Math.squareRoot returns the square root of its input
+/* squareRoot returns the square root of its input
    rounded to the nearest whole number. */
-Math.squareRoot(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
+//#-code-completion(everything, hide)
+//#-code-completion(literal, show, integer)
+squareRoot(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
 //#-hidden-code
 import PlaygroundSupport
 
-let input = parse(PlaygroundPage.current.text, notify: "√", about: "Math.squareRoot", Math.squareRoot)
+let input = parse(PlaygroundPage.current.text, notify: "√", about: "squareRoot", squareRoot)
 if (input ?? 1) < 0 {
     PlaygroundPage.current.assessmentStatus = .pass(message: "Congratulations, it looks like you have a good understanding of partial functions!")
 }

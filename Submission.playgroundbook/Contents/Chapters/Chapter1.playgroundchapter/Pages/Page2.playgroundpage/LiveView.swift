@@ -4,11 +4,14 @@ import PlaygroundSupport
 
 let scene = FactoryScene()
 
-let quadrupleMachine = FunctionMachine(name: "×4", function: Math.quadruple)
+let addFourMachine = FunctionMachine(name: "+4", function: addFour)
+scene.addMachine(addFourMachine)
+
+let quadrupleMachine = FunctionMachine(name: "×4", function: quadruple)
 quadrupleMachine.setInProgress(true)
 scene.addMachine(quadrupleMachine)
 
-let dtatMachine = FunctionMachine(name: "2n+2", function: Math.doubleThenAddTwo)
+let dtatMachine = FunctionMachine(name: "2n+2", function: doubleThenAddTwo)
 dtatMachine.setInProgress(true)
 scene.addMachine(dtatMachine)
 
