@@ -10,8 +10,8 @@ If a function cannot take every possible value, it is know as a **partial** func
 
 Your task here is to find input values which break the function machines.
 */
-/* squareRoot returns the square root of its input
-   rounded to the nearest whole number. */
+// squareRoot returns the square root of its input
+// rounded to the nearest whole number.
 //#-code-completion(everything, hide)
 //#-code-completion(literal, show, integer)
 squareRoot(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)

@@ -20,9 +20,7 @@ addFour(2)
 ````
 
 
-Your next task is to create two new functions:
-* ````quadruple````
-* ````doubleThenAddTwo````
+Your next task is to build some new functions using function composition.
 */
 //#-code-completion(everything, hide)
 //#-code-completion(literal, show, integer)
@@ -34,6 +32,7 @@ parse(PlaygroundPage.current.text, notify: "+4", about: "addFour", addFour)
 //#-end-hidden-code
 //#-code-completion(everything, hide)
 //#-code-completion(identifier, show, addTwo, addFour, double, quadruple)
+// Your new function should multiply its input by 4.
 quadruple = /*#-editable-code*/<#first function#>/*#-end-editable-code*/ >>> /*#-editable-code*/<#second function#>/*#-end-editable-code*/
 //#-code-completion(everything, hide)
 //#-code-completion(literal, show, integer)
@@ -49,13 +48,15 @@ for i in 0...4{
 if(quadPass){
     PlaygroundPage.current.assessmentStatus = .fail(hints: ["Remember, the function on the right is applied first."], solution: nil)
 }else{
-    PlaygroundPage.current.assessmentStatus = .fail(hints: ["Looks like your quadruple function doesn't work! Try applying double to double."], solution: nil)
+    PlaygroundPage.current.assessmentStatus = .fail(hints: ["To quadruple a function, try doubling it twice!"], solution: nil)
 }
 //#-end-hidden-code
 
 //#-code-completion(everything, hide)
-//#-code-completion(identifier, show, addTwo, addFour, double, quadruple, >>>)
-doubleThenAddTwo = /*#-editable-code*/<#Compose doubleThenAddTwo#>/*#-end-editable-code*/
+//#-code-completion(identifier, show, addTwo, addFour, double, quadruple)
+// This function is fairly self-explanatory.
+// If you enter 3, it should output (3×2)+2 = 8
+doubleThenAddTwo = /*#-editable-code*/<#compose your function#>/*#-end-editable-code*/
 //#-code-completion(everything, hide)
 //#-code-completion(literal, show, integer)
 doubleThenAddTwo(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
