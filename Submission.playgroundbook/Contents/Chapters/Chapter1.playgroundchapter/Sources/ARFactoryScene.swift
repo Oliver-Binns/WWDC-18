@@ -1,23 +1,46 @@
 import ARKit
 import SceneKit
+import PlaygroundSupport
 
-public class ARFactoryScene: NSObject{
-    public let view: ARSCNView
+public class ARFactoryScene: FactoryScene{
+    private let view: ARFactoryView
     
-    public init(scene: FactoryScene){
+    public init(){
         let frame = CGRect(x: 0.0, y: 0.0, width: 500.0, height: 600.0)
-        view = ARSCNView(frame: frame)
+        view = ARFactoryView(frame: frame)
+        super.init(scene: SCNScene())
+
+        view.scene = self.scene!
+        view.factory = self
         
-        super.init()
-        
-        view.scene = scene.scene!
         view.setup()
         view.session.delegate = self
-        view.delegate = self
+    }
+    
+    public func getView() -> ARSCNView{
+        return view
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+extension ARFactoryScene: ARSessionDelegate{
+    public func session(_ session: ARSession,
+                        didAdd anchors: [ARAnchor]){
+        for anchor in anchors{
+            guard let anchor = anchor as? ARPlaneAnchor else { continue }
+            //session.setWorldOrigin(relativeTransform: matrix_float4x4)
+        }
+        
+    }
+}
+
+private class ARFactoryView: ARSCNView, PlaygroundLiveViewMessageHandler{
+    var factory: FactoryScene?
+    
+    public func receive(_ message: PlaygroundValue){
+        factory?.receive(message)
     }
 }
 extension ARSCNView{
@@ -26,7 +49,6 @@ extension ARSCNView{
         antialiasingMode = .multisampling4X
         automaticallyUpdatesLighting = false
         preferredFramesPerSecond = 60
-        contentScaleFactor = 1.3
         
         debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         
@@ -36,7 +58,8 @@ extension ARSCNView{
         session.run(
             tracking,
             options: [
-                .resetTracking,.removeExistingAnchors
+                .resetTracking,
+                .removeExistingAnchors
             ]
         )
         
@@ -49,19 +72,4 @@ extension ARSCNView{
         }
     }
 }
-extension ARFactoryScene: ARSCNViewDelegate{
-    
-}
-extension ARFactoryScene: ARSessionDelegate{
-    public func session(_ session: ARSession,
-                        didAdd anchors: [ARAnchor]){
-        if let anchor = anchors.first{
-            view.scene.rootNode.position = SCNVector3(
-                anchor.transform.columns.3.x,
-                anchor.transform.columns.3.y,
-                anchor.transform.columns.3.z
-            )
-        }
-        
-    }
-}
+

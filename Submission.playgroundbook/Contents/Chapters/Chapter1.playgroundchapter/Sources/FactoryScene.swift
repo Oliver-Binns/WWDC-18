@@ -7,9 +7,9 @@ import PlaygroundSupport
 open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDelegate{
     var machines: [FunctionMachine] = []
     
-	public init(){
+    public init(scene: SCNScene = SCNScene(named: "Factory.scn")!){
 		super.init(frame: CGRect(x: 0, y: 0, width: 20, height: 20), options: [SCNView.Option.preferredRenderingAPI.rawValue: SCNRenderingAPI.metal.rawValue])
-        self.scene = SCNScene(named: "Factory.scn")!
+        self.scene = scene
         self.scene!.physicsWorld.contactDelegate = self
 		allowsCameraControl = true
 	}
@@ -19,7 +19,8 @@ open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDel
     }
 	
 	public func addMachine(_ machine: FunctionMachine){
-		machine.node.position = SCNVector3(x: 3.5, y: 0, z: Float(machines.count) * -5)
+        let z = (Float(machines.count) + 1) * machine.scale.x * -2.5
+		machine.node.position = SCNVector3(x: 0, y: 0, z: z)
 		scene?.rootNode.addChildNode(machine.node)
         machines.append(machine)
 	}

@@ -9,12 +9,12 @@ For example, we might have a function `addTwo` that increases the value of our i
 
 We can write this using algebra as:
  
- ![addTwo(x) = x + 2](addTwo.png)
+ ![addTwo x = x + 2](addTwo.png)
 
  
 Another function `double` multiplies its input number by 2.
  
- ![double(x) = 2x](double.png)
+ ![double x = 2x](double.png)
 */
 // Try out each function with various inputs.
 //#-code-completion(everything, hide)

@@ -14,12 +14,12 @@ We can assume a new function composition operation (````>>>````) will give us th
 We can use this operation to easily create a new ````addFour```` function.
 ````
 addFour = addTwo >>> addTwo
-addFour(2)
+addFour (2)
 ````
  
  Using algebra, this looks like:
  
- ![addFour(x) + addTwo(addTwo(x))](addFour.png)
+ ![addFour x + addTwo addTwo x](addFour.png)
  
  As you can see, the function on the **right** is applied first.
  

@@ -3,7 +3,8 @@ import SceneKit
 public class FunctionMachine{
     public let name: String
     public let f: (Int) -> Int?
-    public var toProcess: [SCNNode] = []
+    private var toProcess: [SCNNode] = []
+    let scale = SCNVector3(0.2, 0.2, 0.2);
     
 	var workInProgress = false
 	private var destroyed = false
@@ -16,11 +17,13 @@ public class FunctionMachine{
         
 		let scene = SCNScene(named: "FunctionMachine.scn")!
         node = scene.rootNode.childNode(withName: "machine", recursively: true)!
+        node.scale = scale
         if let conveyor = node.childNode(withName: "conveyor", recursively: true){
             let physics = SCNPhysicsBody(type: .kinematic, shape: nil)
             physics.categoryBitMask = 2
             physics.contactTestBitMask = 7
             physics.collisionBitMask = 7
+            physics.restitution = 0
             conveyor.physicsBody = physics
         }
         
@@ -56,7 +59,7 @@ public class FunctionMachine{
         guard let index = toProcess.index(of: node) else { return }
         toProcess.remove(at: index)
         
-        let input = SCNAction.move(to: SCNVector3(x: 0.5, y: 0.3, z: 0), duration: 0.75)
+        let input = SCNAction.move(to: SCNVector3(x: 0.25, y: 0.15, z: 0), duration: 0.75)
         node.runAction(input){
             guard out != nil else { self.destroy(); return }
             //Set.. output value
@@ -69,8 +72,10 @@ public class FunctionMachine{
             let audio = SCNAudioSource(named: "Process.mp3")!
             let sound = SCNAction.playAudio(audio, waitForCompletion: true)
             node.runAction(sound){
-                let output = SCNAction.move(to: SCNVector3(x: 2.2, y: 0.3, z: 0), duration: 0.75)
-                node.runAction(output)
+                let output = SCNAction.move(to: SCNVector3(x: 1.15, y: 0.15, z: 0), duration: 0.75)
+                node.runAction(output){
+                    //node.physicsBody?.isResting = true
+                }
             }
             
         }
@@ -94,7 +99,7 @@ public class FunctionMachine{
     }
 	
     public func dropNumber(_ number: Int, output: Int?, renderer: SCNSceneRenderer){
-		let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.1)
+		let box = SCNBox(width: 0.25, height: 0.25, length: 0.25, chamferRadius: 0.05)
 		box.firstMaterial!.transparency = 1
         box.firstMaterial!.diffuse.contents = getTextLayer(value: String(number))
         renderer.prepare(box.firstMaterial!, shouldAbortBlock: { return false })
@@ -107,12 +112,14 @@ public class FunctionMachine{
         let child = SCNNode(geometry: geometry)
         let value = (val != nil) ? String(val!) : " "
         child.name = "numberbox_" + self.name + "_" + value
-        child.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        child.physicsBody = SCNPhysicsBody(type: .dynamic, shape:
+            SCNPhysicsShape(geometry: geometry, options:  [SCNPhysicsShape.Option.scale: scale])
+        )
         child.physicsBody!.isAffectedByGravity = true
         child.physicsBody!.categoryBitMask = 4
         child.physicsBody!.contactTestBitMask = 7
         child.physicsBody!.collisionBitMask = 7
-        child.position = SCNVector3(x: -3.5, y: 5, z: 0)
+        child.position = SCNVector3(x: -1.75, y: 2.5, z: 0)
         return child
     }
 	
