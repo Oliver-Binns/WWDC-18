@@ -23,6 +23,10 @@ public class FunctionMachine{
             physics.collisionBitMask = 7
             conveyor.physicsBody = physics
         }
+        
+        //Setup display-
+        let display = node.childNode(withName: "display", recursively: true)!
+        display.geometry?.firstMaterial?.diffuse.contents = getTextLayer(value: String(name), color: #colorLiteral(red: 0.04705882353, green: 0.3450980392, blue: 0.8156862745, alpha: 1).cgColor, textColor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor)
 		
 		//Add smoke-
 		if let chimney = node.childNode(withName: "smoke", recursively: true){
@@ -72,7 +76,7 @@ public class FunctionMachine{
         }
     }
     
-    private func getTextLayer(value: String, color: CGColor? = nil) -> CALayer{
+    private func getTextLayer(value: String, color: CGColor? = nil, textColor: CGColor? = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).cgColor) -> CALayer{
         let layer = CALayer()
         layer.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
         layer.backgroundColor = (color != nil) ? color!: CGColor.random()
@@ -81,7 +85,8 @@ public class FunctionMachine{
         textLayer.frame = layer.frame
         textLayer.string = value
         textLayer.alignmentMode = kCAAlignmentCenter
-        textLayer.foregroundColor = UIColor.black.cgColor
+        textLayer.foregroundColor = textColor
+        textLayer.isWrapped = true
         textLayer.display()
         
         layer.addSublayer(textLayer)

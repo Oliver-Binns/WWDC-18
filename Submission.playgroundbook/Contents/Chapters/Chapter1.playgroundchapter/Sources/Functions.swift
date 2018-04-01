@@ -33,13 +33,16 @@ public class Math{
     public static var doubleThenAddTwo: (Int) -> Int = returnVal
 }
 
-public func parse(_ text: String, notify machine: String, about function: String, _ f: (Int) -> Int?){
+public func parse(_ text: String, notify machine: String, about function: String, _ f: (Int) -> Int?) -> Int?{
     let regex = "\(function)\\([^)]*"
-    guard let range = text.range(of: regex, options: .regularExpression) else { return }
+    guard let range = text.range(of: regex, options: .regularExpression) else { return nil }
     let placeholder = String(text[range]).replacingOccurrences(of: "\(function)(", with: "")
-    guard let digitRange = placeholder.range(of: "[-+]?[0-9]+", options: .regularExpression) else { return }
-    guard let input = Int(placeholder[digitRange]) else { return }
+    guard let digitRange = placeholder.range(of: "[-+]?[0-9]+", options: .regularExpression) else { return nil }
+    guard let input = Int(placeholder[digitRange]) else { return nil }
+    
     send(f: machine, input: input, output: f(input))
+    
+    return input
 }
 
 public func send(f: String, input: Int, output: Int?){
