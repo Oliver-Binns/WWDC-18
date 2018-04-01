@@ -3,14 +3,12 @@
 
 Often we will want to apply a function to the output of another function.
 
-Imagine we want to double a number and add two
+Imagine we want to double a number and then add two.
 
 
 We may want to create a new function to join these two existing functions together.
 
 We can assume a new function composition operation (````>>>````) will give us the ability to do this.
-
-Functions can now be combined, but remember the function on the **right-hand** side will be applied first.
 
 
 We can use this operation to easily create a new ````addFour```` function.
@@ -18,10 +16,17 @@ We can use this operation to easily create a new ````addFour```` function.
 addFour = addTwo >>> addTwo
 addFour(2)
 ````
+ 
+ Using algebra, this looks like:
+ 
+ ![addFour(x) + addTwo(addTwo(x))](addFour.png)
+ 
+ As you can see, the function on the **right** is applied first.
+ 
+ This is known as **right-associativity**.
 
-
-Your next task is to build some new functions using function composition.
 */
+// Try and build some of your own functions using composition.
 //#-code-completion(everything, hide)
 //#-code-completion(literal, show, integer)
 addFour(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)
