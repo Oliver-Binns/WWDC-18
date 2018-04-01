@@ -44,14 +44,18 @@ public class FunctionMachine{
         
 		node.childNode(withName: "smoke", recursively: true)?.removeFromParentNode()
         
-        guard let capsule = node.childNode(withName: "capsule", recursively: true) else { return }
+        guard let cylinder = node.childNode(withName: "main", recursively: true) else { return }
+        
         
         let fire = SCNParticleSystem(named: "Fire.scnp", inDirectory: nil)!
-        let audio = SCNAudioSource(named: "Destroy.mp3")!
-        let sound = SCNAction.playAudio(audio, waitForCompletion: false)
-            
-		capsule.addParticleSystem(fire)
-        capsule.runAction(sound)
+        cylinder.addParticleSystem(fire)
+        
+        //CAUSES CRASH, could not diagnose in time :(
+        //let audio = SCNAudioSource(named: "Fire.mp3")!
+        //audio.isPositional = true
+        //audio.shouldStream = true
+        //let sound = SCNAction.playAudio(audio, waitForCompletion: true)
+        //cylinder.runAction(sound)
 	}
 	
     public func process(node: SCNNode, out: Int?, renderer: SCNSceneRenderer){
@@ -70,11 +74,13 @@ public class FunctionMachine{
             
             //https://www.freesoundeffects.com
             let audio = SCNAudioSource(named: "Process.mp3")!
+            audio.isPositional = true
+            audio.shouldStream = true
             let sound = SCNAction.playAudio(audio, waitForCompletion: true)
             node.runAction(sound){
-                let output = SCNAction.move(to: SCNVector3(x: 1.15, y: 0.15, z: 0), duration: 0.75)
+                let output = SCNAction.move(to: SCNVector3(x: 1, y: 0.15, z: 0), duration: 0.75)
                 node.runAction(output){
-                    //node.physicsBody?.isResting = true
+                    node.physicsBody?.velocity = SCNVector3(0,0,0)
                 }
             }
             

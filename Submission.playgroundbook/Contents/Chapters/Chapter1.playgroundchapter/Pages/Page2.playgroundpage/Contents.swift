@@ -27,6 +27,7 @@ addFour (2)
 
 */
 // Try and build some of your own functions using composition.
+
 //#-code-completion(everything, hide)
 //#-code-completion(literal, show, integer)
 addFour(/*#-editable-code*/<#T##number##Int#>/*#-end-editable-code*/)

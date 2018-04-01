@@ -9,7 +9,7 @@ public class ARFactoryScene: FactoryScene{
         let frame = CGRect(x: 0.0, y: 0.0, width: 500.0, height: 600.0)
         view = ARFactoryView(frame: frame)
         super.init(scene: SCNScene())
-
+        
         view.scene = self.scene!
         view.factory = self
         
@@ -50,7 +50,7 @@ extension ARSCNView{
         automaticallyUpdatesLighting = false
         preferredFramesPerSecond = 60
         
-        debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        //debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         
         session = ARSession()
         let tracking = ARWorldTrackingConfiguration()

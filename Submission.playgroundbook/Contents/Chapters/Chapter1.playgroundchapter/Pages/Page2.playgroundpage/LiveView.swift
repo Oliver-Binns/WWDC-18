@@ -2,7 +2,7 @@ import UIKit
 import SceneKit
 import PlaygroundSupport
 
-let scene = FactoryScene()
+let scene = ARFactoryScene()
 
 let addFourMachine = FunctionMachine(name: "+4", function: addFour)
 scene.addMachine(addFourMachine)
@@ -15,4 +15,4 @@ let dtatMachine = FunctionMachine(name: "2n+2", function: doubleThenAddTwo)
 dtatMachine.setInProgress(true)
 scene.addMachine(dtatMachine)
 
-PlaygroundPage.current.liveView = scene
+PlaygroundPage.current.liveView = scene.getView()
