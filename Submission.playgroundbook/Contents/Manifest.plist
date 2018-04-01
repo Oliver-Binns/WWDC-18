@@ -15,7 +15,7 @@
 	<key>ContentIdentifier</key>
 	<string>com.oliver-binns.FunctionalProgramming</string>
 	<key>DeploymentTarget</key>
-	<string>ios10.0</string>
+	<string>ios11.0</string>
 	<key>ImageReference</key>
 	<string>FP_Icon.png</string>
 	<key>Chapters</key>

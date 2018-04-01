@@ -44,7 +44,7 @@ open class FactoryScene: SCNView, SCNSceneRendererDelegate, SCNPhysicsContactDel
                 let data = name.split(separator: "_")
                 let machine = getMachine(named: String(data[1]))!
                 let out: Int? = Int(data[2])
-                machine.process(node: contact.nodeB, out: out)
+                machine.process(node: contact.nodeB, out: out, renderer: self)
             }
         }
     }
@@ -57,9 +57,9 @@ extension FactoryScene: PlaygroundLiveViewMessageHandler{
         guard case let .integer(n)? = dict["arg"] else { return }
         
         guard case let .integer(out)? = dict["ret"] else {
-            getMachine(named: f)?.dropNumber(n, output: nil)
+            getMachine(named: f)?.dropNumber(n, output: nil, renderer: self)
             return
         }
-        getMachine(named: f)?.dropNumber(n, output: out)
+        getMachine(named: f)?.dropNumber(n, output: out, renderer: self)
     }
 }

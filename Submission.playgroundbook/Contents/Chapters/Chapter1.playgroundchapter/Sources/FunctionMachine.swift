@@ -34,32 +34,47 @@ public class FunctionMachine{
 	public func destroy(){
         guard !self.destroyed else { return }
         self.destroyed = true
-		let fire = SCNParticleSystem(named: "Fire.scnp", inDirectory: nil)!
+        
 		node.childNode(withName: "smoke", recursively: true)?.removeFromParentNode()
-		node.childNode(withName: "capsule", recursively: true)?.addParticleSystem(fire)
+        
+        guard let capsule = node.childNode(withName: "capsule", recursively: true) else { return }
+        
+        let fire = SCNParticleSystem(named: "Fire.scnp", inDirectory: nil)!
+        let audio = SCNAudioSource(named: "Destroy.mp3")!
+        let sound = SCNAction.playAudio(audio, waitForCompletion: false)
+            
+		capsule.addParticleSystem(fire)
+        capsule.runAction(sound)
 	}
 	
-    public func process(node: SCNNode, out: Int?){
+    public func process(node: SCNNode, out: Int?, renderer: SCNSceneRenderer){
         //Only process each item once
-        guard let index = toProcess.index(of: node) else { print("not in array"); return }
+        guard let index = toProcess.index(of: node) else { return }
         toProcess.remove(at: index)
         
         let input = SCNAction.move(to: SCNVector3(x: 0.5, y: 0.3, z: 0), duration: 0.75)
         node.runAction(input){
             guard out != nil else { self.destroy(); return }
             //Set.. output value
-            guard let diffuse = node.geometry?.firstMaterial?.diffuse else { return }
-            guard let layer = diffuse.contents as? CALayer else { return }
-            diffuse.contents = self.getTextLayer(value: String(out!), color: layer.backgroundColor)
+            guard let material = node.geometry?.firstMaterial else { return }
+            guard let layer = material.diffuse.contents as? CALayer else { return }
+            material.diffuse.contents = self.getTextLayer(value: String(out!), color: layer.backgroundColor)
+            renderer.prepare(material, shouldAbortBlock: { return false })
             
-            let output = SCNAction.move(to: SCNVector3(x: 2.2, y: 0.3, z: 0), duration: 0.75)
-            node.runAction(output)
+            //https://www.freesoundeffects.com
+            let audio = SCNAudioSource(named: "Process.mp3")!
+            let sound = SCNAction.playAudio(audio, waitForCompletion: true)
+            node.runAction(sound){
+                let output = SCNAction.move(to: SCNVector3(x: 2.2, y: 0.3, z: 0), duration: 0.75)
+                node.runAction(output)
+            }
+            
         }
     }
     
     private func getTextLayer(value: String, color: CGColor? = nil) -> CALayer{
         let layer = CALayer()
-        layer.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        layer.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
         layer.backgroundColor = (color != nil) ? color!: CGColor.random()
         
         let textLayer = CATextLayer()
@@ -73,10 +88,11 @@ public class FunctionMachine{
         return layer
     }
 	
-    public func dropNumber(_ number: Int, output: Int?){
+    public func dropNumber(_ number: Int, output: Int?, renderer: SCNSceneRenderer){
 		let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0.1)
-		box.firstMaterial?.transparency = 1
-        box.firstMaterial?.diffuse.contents = getTextLayer(value: String(number))
+		box.firstMaterial!.transparency = 1
+        box.firstMaterial!.diffuse.contents = getTextLayer(value: String(number))
+        renderer.prepare(box.firstMaterial!, shouldAbortBlock: { return false })
         let child = createChildNode(val: output, geometry: box)
         toProcess.append(child)
         node.addChildNode(child)
