@@ -32,6 +32,7 @@ public let returnVal = {
 
 public var quadruple: (Int) -> Int = returnVal
 public var doubleThenAddTwo: (Int) -> Int = returnVal
+public var curriedMultiply = ~multiply
 
 public func parse(_ text: String, notify machine: String, about function: String, _ f: (Int) -> Int?) -> Int?{
     let regex = "\(function)\\([^)]*"
@@ -67,4 +68,9 @@ precedencegroup Compose {
 }
 public func >>> <A, B, C>(f: @escaping (B) -> C, g: @escaping (A) -> B) -> (A) -> C {
 	return { x in f(g(x)) }
+}
+
+prefix operator ~
+public prefix func ~<A, B, C>(f: @escaping (A, B) -> C) -> (A) -> (B) -> C {
+    return { a in { b in f(a, b) } }
 }

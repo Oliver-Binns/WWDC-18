@@ -20,7 +20,7 @@ import PlaygroundSupport
 
 let input = parse(PlaygroundPage.current.text, notify: "√", about: "squareRoot", squareRoot)
 if (input ?? 1) < 0 {
-    PlaygroundPage.current.assessmentStatus = .pass(message: "Congratulations, it looks like you have a good understanding of partial functions!")
+    PlaygroundPage.current.assessmentStatus = .pass(message: "Congratulations, you've managed to break the function machines. It looks like you have a good understanding of partial functions!")
 }
 //#-end-hidden-code
 /*:
